@@ -8,3 +8,5 @@ def pipeline(Map<String, String> options) {
       sh 'npm i'
     }
 }
+
+return this;
