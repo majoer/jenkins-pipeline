@@ -1,3 +1,5 @@
+package no.mats.pipelines;
+
 class NpmPipeline {
 
   NpmPipeline() {
