@@ -1,6 +1,6 @@
 package no.mats.pipelines;
 
-def pipeline(Map<String, String> options) {
+def pipeline(options) {
 
     stage ('Install') {
       echo 'Install'
