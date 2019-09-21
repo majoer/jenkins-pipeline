@@ -2,7 +2,7 @@ package no.mats.pipelines;
 
 class NpmPipeline {
 
-  NpmPipeline(options) {
+  NpmPipeline(Map<String, String> options) {
     pipeline {
       agent any
       environment {
