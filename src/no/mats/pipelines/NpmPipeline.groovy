@@ -1,12 +1,16 @@
 package no.mats.pipelines;
 
-def pipeline(options) {
+def run(Map<String, String> options) {
+  pipeline {
+    agent any
 
-    stage ('Install') {
-      echo 'Install'
-
-      sh 'npm i'
+    stages {
+      stage('Install') {
+        steps {
+          echo 'Install'
+          sh 'npm i'
+        }
+      }
     }
+  }
 }
-
-return this;
