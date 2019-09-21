@@ -2,7 +2,6 @@ package no.mats.pipelines;
 
 def run(Map<String, String> options) {
   pipeline {
-    agent any
 
     stages {
       stage('Install') {
