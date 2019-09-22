@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  nodejs:
+    build: "https://raw.githubusercontent.com/majoer/jenkins-pipeline/master/slaves/slave-nodejs/Dockerfile"
+    ports:
+        - "22:22"
+    environment:
+      - "JENKINS_SLAVE_SSH_PUBKEY={{REPLACE_ME}}"
