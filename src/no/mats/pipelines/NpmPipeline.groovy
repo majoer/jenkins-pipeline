@@ -1,7 +1,7 @@
 package no.mats.pipelines;
 
 def run(Map<String, String> options) {
-  node('master') {
+  node('nodejs') {
 
     stage('Install') {
       echo 'Install'
