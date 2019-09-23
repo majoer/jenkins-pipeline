@@ -1,11 +1,13 @@
 package no.mats.pipelines;
 
 def run(Map<String, String> options) {
-  node('nodejs') {
-
-    stage('Install') {
-      echo 'Install'
-      sh 'npm i'
+  node {
+    
+    docker.image('node:10').withRun() { c ->
+      stage('Install') {
+        echo 'Install'
+        sh 'npm i'
+      }
     }
   }
 }
