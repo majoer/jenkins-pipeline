@@ -5,7 +5,10 @@ def run(Map<String, String> options) {
     def image;
 
     stage('Get docker image') {
-      image = docker.image('node:10-slim').withRun()
+      image = docker.image('node:10-slim')
+      image.inside {
+        echo 'Image is ready'
+      }
     }
     
     image.inside {
