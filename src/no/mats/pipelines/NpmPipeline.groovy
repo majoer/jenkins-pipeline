@@ -2,12 +2,18 @@ package no.mats.pipelines;
 
 def run(Map<String, String> options) {
   node {
+    def image;
+
+    stage('Get docker image') {
+      image = docker.image('node:10-slim')
+    }
     
-    docker.image('node:10').withRun() { c ->
+    image.inside {
+
       stage('Install') {
-        echo 'Install'
         sh 'npm i'
       }
+
     }
   }
 }
