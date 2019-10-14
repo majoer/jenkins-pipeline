@@ -12,7 +12,9 @@ def run(Map<String, String> options) {
 
   node {
     def image
-    def packageJson
+    def shouldLint = false
+    def shouldBuild = false
+    def shouldTest = false
 
     stage("Get docker image") {
       image = docker.image("node:10-slim")
@@ -24,7 +26,12 @@ def run(Map<String, String> options) {
     stage("Checkout") {
       checkout scm
       def jsonSlurper = new JsonSlurper()
-      packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
+      def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
+      def scripts = package.scripts;
+      
+      shouldLint = packageJson.lint-ci
+      shouldBuild = packageJson.build-ci
+      shouldTest = packageJson.test-ci
     }
     
     image.inside {
@@ -33,7 +40,7 @@ def run(Map<String, String> options) {
         sh "npm i"
       }
 
-      if (packageJson.scripts.lint-ci) {
+      if (shouldLint) {
 
         stage("Lint") {
           sh "npm run lint-ci"
@@ -41,7 +48,7 @@ def run(Map<String, String> options) {
 
       }
 
-      if (packageJson.scripts.build-ci) {
+      if (shouldBuild) {
 
         stage("Build") {
           sh "npm run build-ci"
@@ -49,7 +56,7 @@ def run(Map<String, String> options) {
 
       }
 
-      if (packageJson.scripts.test-ci) {
+      if (shouldTest) {
 
         stage("Test") {
           sh "npm run test-ci"
