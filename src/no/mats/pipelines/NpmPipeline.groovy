@@ -23,10 +23,7 @@ def run(Map<String, String> options) {
 
     stage('Checkout') {
       checkout scm
-      def rootFiles = new File(".")
-      rootFiles.eachFile() { file ->
-         println file.getAbsolutePath()
-      }
+      println pwd()
       def jsonSlurper = new JsonSlurper()
       packageJson = jsonSlurper.parse(new File('./package.json'))
     }
