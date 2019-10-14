@@ -14,52 +14,52 @@ def run(Map<String, String> options) {
     def image
     def packageJson
 
-    stage('Get docker image') {
-      image = docker.image('node:10-slim')
+    stage("Get docker image") {
+      image = docker.image("node:10-slim")
       image.inside {
-        echo 'Image is ready'
+        echo "Image is ready"
       }
     }
 
-    stage('Checkout') {
+    stage("Checkout") {
       checkout scm
       def jsonSlurper = new JsonSlurper()
-      packageJson = jsonSlurper.parse(new File('${pwd()}/package.json'))
+      packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
     }
     
     image.inside {
 
-      stage('Install') {
-        sh 'npm i'
+      stage("Install") {
+        sh "npm i"
       }
 
       if (packageJson.scripts.lint-ci) {
 
-        stage('Lint') {
-          sh 'npm run lint-ci'
+        stage("Lint") {
+          sh "npm run lint-ci"
         }
 
       }
 
       if (packageJson.scripts.build-ci) {
 
-        stage('Build') {
-          sh 'npm run build-ci'
+        stage("Build") {
+          sh "npm run build-ci"
         }
 
       }
 
       if (packageJson.scripts.test-ci) {
 
-        stage('Test') {
-          sh 'npm run test-ci'
+        stage("Test") {
+          sh "npm run test-ci"
         }
 
       }
 
       if (options.deploy) {
 
-        stage('Deploy to Beta') {
+        stage("Deploy to Beta") {
 
         }
       }
