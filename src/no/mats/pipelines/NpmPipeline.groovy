@@ -23,9 +23,9 @@ def run(Map<String, String> options) {
 
     stage('Checkout') {
       checkout scm
-      def rootFiles = new File(".").listRoots()
-      rootFiles.each { file ->
-         println file.absolutePath
+      def rootFiles = new File(".")
+      rootFiles.eachFile() { file ->
+         println file.getAbsolutePath()
       }
       def jsonSlurper = new JsonSlurper()
       packageJson = jsonSlurper.parse(new File('./package.json'))
