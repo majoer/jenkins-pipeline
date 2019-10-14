@@ -24,7 +24,7 @@ def run(Map<String, String> options) {
     stage('Checkout') {
       checkout(scm)
       def jsonSlurper = new JsonSlurper()
-      packageJson = jsonSlurper.parse(new File('package.json'))
+      packageJson = jsonSlurper.parse(new File('./package.json'))
     }
     
     image.inside {
