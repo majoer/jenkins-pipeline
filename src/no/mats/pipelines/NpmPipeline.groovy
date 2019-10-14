@@ -2,13 +2,13 @@ package no.mats.pipelines
 
 import groovy.json.JsonSlurper 
 
-def jsonSlurper = new JsonSlurper()
-
-def defaultOptions = [
-  deploy: false
-]
-
 def run(Map<String, String> options) {
+  def jsonSlurper = new JsonSlurper()
+
+  def defaultOptions = [
+    deploy: false
+  ]
+
   options = defaultOptions + options
   packageJson = jsonSlurper.parse(new File('package.json'))
 
