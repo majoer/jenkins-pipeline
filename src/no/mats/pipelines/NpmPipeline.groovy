@@ -1,5 +1,7 @@
 package no.mats.pipelines
 
+import groovy.json.JsonSlurper 
+
 def jsonSlurper = new JsonSlurper()
 
 def defaultOptions = [
