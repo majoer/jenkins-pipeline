@@ -5,7 +5,10 @@ import groovy.json.JsonSlurper
 def run(Map<String, String> options) {
 
   def defaultOptions = [
-    deploy: false
+    deploy: false,
+    scriptLint: 'lint:ci',
+    scriptBuild: 'build:ci',
+    scriptTest: 'test:ci'
   ]
 
   options = defaultOptions + defaultOptions
@@ -29,10 +32,9 @@ def run(Map<String, String> options) {
       def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
       def scripts = packageJson.scripts;
       
-      println scripts
-      shouldLint = scripts["lint-ci"]
-      shouldBuild = scripts["build-ci"]
-      shouldTest = scripts["test-ci"]
+      shouldLint = scripts[options.scriptLint]
+      shouldBuild = scripts[options.scriptBuild]
+      shouldTest = scripts[options.scriptTest]
     }
     
     image.inside {
@@ -44,7 +46,7 @@ def run(Map<String, String> options) {
       if (shouldLint) {
 
         stage("Lint") {
-          sh "npm run lint-ci"
+          sh "npm run ${options.scriptLint}"
         }
 
       }
@@ -52,7 +54,7 @@ def run(Map<String, String> options) {
       if (shouldBuild) {
 
         stage("Build") {
-          sh "npm run build-ci"
+          sh "npm run ${options.scriptBuild}"
         }
 
       }
@@ -60,7 +62,7 @@ def run(Map<String, String> options) {
       if (shouldTest) {
 
         stage("Test") {
-          sh "npm run test-ci"
+          sh "npm run ${options.scriptTest}"
         }
 
       }
