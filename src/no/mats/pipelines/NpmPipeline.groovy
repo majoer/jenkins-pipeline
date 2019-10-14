@@ -29,9 +29,9 @@ def run(Map<String, String> options) {
       def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
       def scripts = package.scripts;
       
-      shouldLint = packageJson.lint-ci
-      shouldBuild = packageJson.build-ci
-      shouldTest = packageJson.test-ci
+      shouldLint = scripts.lint-ci
+      shouldBuild = scripts.build-ci
+      shouldTest = scripts.test-ci
     }
     
     image.inside {
