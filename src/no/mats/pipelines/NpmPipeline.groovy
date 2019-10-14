@@ -27,7 +27,7 @@ def run(Map<String, String> options) {
       checkout scm
       def jsonSlurper = new JsonSlurper()
       def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
-      def scripts = package.scripts;
+      def scripts = packageJson.scripts;
       
       shouldLint = scripts.lint-ci
       shouldBuild = scripts.build-ci
