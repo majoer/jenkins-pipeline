@@ -1,6 +1,6 @@
 package no.mats.pipelines
 
-def jsonSlurper = new jsonSlurper()
+def jsonSlurper = new JsonSlurper()
 
 def defaultOptions = [
   deploy: false
