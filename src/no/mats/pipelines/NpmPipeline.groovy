@@ -1,8 +1,17 @@
-package no.mats.pipelines;
+package no.mats.pipelines
+
+def jsonSlurper = new jsonSlurper()
+
+def defaultOptions [
+  deploy: false
+]
 
 def run(Map<String, String> options) {
+  options = defaultOptions + options
+  packageJson = jsonSlurper.parse(new File('package.json'))
+
   node {
-    def image;
+    def image
 
     stage('Get docker image') {
       image = docker.image('node:10-slim')
@@ -17,6 +26,36 @@ def run(Map<String, String> options) {
         sh 'npm i'
       }
 
+      if (packageJson.scripts.lint-ci) {
+
+        stage('Lint') {
+          sh 'npm run lint-ci'
+        }
+
+      }
+
+      if (packageJson.scripts.build-ci) {
+
+        stage('Build') {
+          sh 'npm run build-ci'
+        }
+
+      }
+
+      if (packageJson.scripts.test-ci) {
+
+        stage('Test') {
+          sh 'npm run test-ci'
+        }
+
+      }
+
+      if (options.deploy) {
+
+        stage('Deploy to Beta') {
+
+        }
+      }
     }
   }
 }
