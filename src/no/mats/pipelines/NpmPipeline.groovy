@@ -3,23 +3,28 @@ package no.mats.pipelines
 import groovy.json.JsonSlurper 
 
 def run(Map<String, String> options) {
-  def jsonSlurper = new JsonSlurper()
 
   def defaultOptions = [
     deploy: false
   ]
 
-  options = defaultOptions + options
-  packageJson = jsonSlurper.parse(new File('package.json'))
+  options = defaultOptions + defaultOptions
 
   node {
     def image
+    def packageJson
 
     stage('Get docker image') {
       image = docker.image('node:10-slim')
       image.inside {
         echo 'Image is ready'
       }
+    }
+
+    stage('Checkout') {
+      checkout(scm)
+      def jsonSlurper = new JsonSlurper()
+      packageJson = jsonSlurper.parse(new File('package.json'))
     }
     
     image.inside {
