@@ -22,7 +22,11 @@ def run(Map<String, String> options) {
     }
 
     stage('Checkout') {
-      checkout(scm)
+      checkout scm
+      def rootFiles = new File(".").listRoots()
+      rootFiles.each { file ->
+         println file.absolutePath
+      }
       def jsonSlurper = new JsonSlurper()
       packageJson = jsonSlurper.parse(new File('./package.json'))
     }
