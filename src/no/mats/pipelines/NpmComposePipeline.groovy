@@ -47,7 +47,7 @@ def run(Map<String, String> options) {
       shouldTest = scripts[options.scriptTest]
     }
     
-    compose { () ->
+    compose {
       nodeImage.inside {
 
         stage("Install") {
