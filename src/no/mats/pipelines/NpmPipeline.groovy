@@ -2,17 +2,17 @@ package no.mats.pipelines
 
 import groovy.json.JsonSlurper 
 
-def run(Map<String, String> options) {
-
-  def withDockerNetwork(Closure inner) {
-    try {
-        networkId = UUID.randomUUID().toString()
-        sh "docker network create ${networkId}"
-        inner.call(networkId)
-    } finally {
-        sh "docker network rm ${networkId}"
-    }
+def withDockerNetwork(Closure inner) {
+  try {
+      networkId = UUID.randomUUID().toString()
+      sh "docker network create ${networkId}"
+      inner.call(networkId)
+  } finally {
+      sh "docker network rm ${networkId}"
   }
+}
+
+def run(Map<String, String> options) {
 
   def defaultOptions = [
     deploy: false,
