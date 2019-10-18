@@ -68,7 +68,7 @@ def run(Map<String, String> options) {
         
         postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb -p 5432:5431") { c ->
             
-          postgresImage.inside() {
+          postgresImage.inside {
             sh 'while ! mysqladmin ping -hdb --silent; do sleep 1; done'
           }
         }
