@@ -77,9 +77,9 @@ def run(Map<String, String> options) {
 
           def postgresImage = docker.image('postgres:12-alpine')
           
-          postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb --network ${n}") { c ->
+          postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb --network ${n} --name=psql") { c ->
             postgresImage.inside("--network ${n}") {
-              sh 'while ! pg_isready -U test -d bookmarkdb; do sleep 1; done'
+              sh 'while ! pg_isready -U test -d bookmarkdb -h psql; do sleep 1; done'
             }
           }
         }
