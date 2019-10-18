@@ -79,7 +79,7 @@ def run(Map<String, String> options) {
           
           postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb -p 5431:5432 --network ${n}") { c ->
             postgresImage.inside("--network ${n}") {
-              sh 'while ! pg_isready -U test -d bookmarkdb -p 5431; do sleep 1; done'
+              sh 'while ! pg_isready -U test -d bookmarkdb -p 5432; do sleep 1; done'
             }
           }
         }
