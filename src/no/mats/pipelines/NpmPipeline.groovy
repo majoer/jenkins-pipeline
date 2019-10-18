@@ -8,7 +8,8 @@ def run(Map<String, String> options) {
     deploy: false,
     scriptLint: 'lint:ci',
     scriptBuild: 'build:ci',
-    scriptTest: 'test:ci'
+    scriptTest: 'test:ci',
+    withPostgres: false
   ]
 
   options = defaultOptions + defaultOptions
