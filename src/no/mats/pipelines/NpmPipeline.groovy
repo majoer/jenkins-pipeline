@@ -72,34 +72,37 @@ def run(Map<String, String> options) {
         }
       }
 
-      if (options.withPostgres && shouldTest) {
-        stage("Create Postgres container") {
+      if (shouldTest) {
 
-          def postgresImage = docker.image('postgres:12-alpine')
-          
-          postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb --network ${n} --name=psql") { c ->
-            postgresImage.inside("--network ${n}") {
-              sh 'while ! pg_isready -U test -d bookmarkdb -h psql; do sleep 1; done'
+        if (options.withPostgres) {
+
+          stage("Create Postgres container") {
+
+            def postgresImage = docker.image('postgres:12-alpine')
+            
+            postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb --network ${n} --name=postgres") { c ->
+              postgresImage.inside("--network ${n}") {
+                sh 'while ! pg_isready -U test -d bookmarkdb -h postgres; do sleep 1; done'
+              }
+
+              nodeImage.inside("--network ${n}") {
+                stage("Test") {
+                  sh "npm run ${options.scriptTest}"
+                }
+              }
             }
+          }
+        } else {
+          stage("Test") {
+            sh "npm run ${options.scriptTest}"
           }
         }
       }
 
-      nodeImage.inside("--network ${n}") {
+      if (options.deploy) {
 
-        if (shouldTest) {
-
-          stage("Test") {
-            sh "npm run ${options.scriptTest}"
-          }
-
-        }
-
-        if (options.deploy) {
-
-          stage("Deploy to Beta") {
-          
-          }
+        stage("Deploy to Beta") {
+        
         }
       }
     }
