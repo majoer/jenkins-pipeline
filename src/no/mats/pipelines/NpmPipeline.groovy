@@ -12,7 +12,7 @@ def run(Map<String, String> options) {
     withPostgres: false
   ]
 
-  options = defaultOptions + defaultOptions
+  options = defaultOptions + options
 
   node {
     def image
