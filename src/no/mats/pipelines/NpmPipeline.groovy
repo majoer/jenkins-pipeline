@@ -21,7 +21,7 @@ def run(Map<String, String> options) {
     def shouldTest = false
 
     stage("Create Nodejs container") {
-      image = docker.image("node:10-slim")
+      image = docker.image("node:12-alpine")
       image.inside {
         echo "Image is ready"
       }
@@ -64,7 +64,7 @@ def run(Map<String, String> options) {
     if (options.withPostgres) {
       stage("Create Postgres container") {
 
-        def postgresImage = docker.image('postgres/12-alpine')
+        def postgresImage = docker.image('postgres:12-alpine')
         
         postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb -p 5432:5431") { c ->
             
