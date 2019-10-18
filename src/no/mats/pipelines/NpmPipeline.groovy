@@ -19,7 +19,7 @@ def run(Map<String, String> options) {
     def shouldBuild = false
     def shouldTest = false
 
-    stage("Get docker image") {
+    stage("Create Nodejs container") {
       image = docker.image("node:10-slim")
       image.inside {
         echo "Image is ready"
@@ -58,6 +58,23 @@ def run(Map<String, String> options) {
         }
 
       }
+    }
+
+    if (options.withPostgres) {
+      stage("Create Postgres container") {
+
+        def postgresImage = docker.image('postgres/12-alpine')
+        
+        postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb -p 5432:5431") { c ->
+            
+          postgresImage.inside() {
+            sh 'while ! mysqladmin ping -hdb --silent; do sleep 1; done'
+          }
+        }
+      }
+    }
+
+    image.inside {
 
       if (shouldTest) {
 
