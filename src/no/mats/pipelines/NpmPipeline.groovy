@@ -31,8 +31,8 @@ def run(Map<String, String> options) {
     def shouldTest = false
 
     stage("Create Nodejs container") {
-      image = docker.image("node:10-alpine")
-      image.inside {
+      nodeImage = docker.image("node:10-alpine")
+      nodeImage.inside {
         echo "Image is ready"
       }
     }
@@ -49,7 +49,7 @@ def run(Map<String, String> options) {
     }
     
     withDockerNetwork { n ->
-      image.inside("--network ${n}") {
+      nodeImage.inside("--network ${n}") {
 
         stage("Install") {
           sh "npm i"
@@ -70,19 +70,22 @@ def run(Map<String, String> options) {
           }
 
         }
+      }
 
-        if (options.withPostgres && shouldTest) {
-          stage("Create Postgres container") {
+      if (options.withPostgres && shouldTest) {
+        stage("Create Postgres container") {
 
-            def postgresImage = docker.image('postgres:12-alpine')
-            
-            postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb -p 5431:5432 --network ${n}") { c ->
-              postgresImage.inside("--network ${n}") {
-                sh 'while ! pg_isready -U test -d bookmarkdb -p 5431; do sleep 1; done'
-              }
+          def postgresImage = docker.image('postgres:12-alpine')
+          
+          postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb -p 5431:5432 --network ${n}") { c ->
+            postgresImage.inside("--network ${n}") {
+              sh 'while ! pg_isready -U test -d bookmarkdb -p 5431; do sleep 1; done'
             }
           }
         }
+      }
+
+      nodeImage.inside("--network ${n}") {
 
         if (shouldTest) {
 
