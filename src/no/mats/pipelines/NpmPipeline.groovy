@@ -21,7 +21,7 @@ def run(Map<String, String> options) {
     def shouldTest = false
 
     stage("Create Nodejs container") {
-      image = docker.image("node:12-alpine")
+      image = docker.image("node:10-alpine")
       image.inside {
         echo "Image is ready"
       }
