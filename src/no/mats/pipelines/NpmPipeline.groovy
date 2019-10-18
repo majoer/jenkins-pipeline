@@ -4,6 +4,16 @@ import groovy.json.JsonSlurper
 
 def run(Map<String, String> options) {
 
+  def withDockerNetwork(Closure inner) {
+    try {
+        networkId = UUID.randomUUID().toString()
+        sh "docker network create ${networkId}"
+        inner.call(networkId)
+    } finally {
+        sh "docker network rm ${networkId}"
+    }
+  }
+
   def defaultOptions = [
     deploy: false,
     scriptLint: 'lint:ci',
@@ -38,55 +48,53 @@ def run(Map<String, String> options) {
       shouldTest = scripts[options.scriptTest]
     }
     
-    image.inside {
+    withDockerNetwork { n ->
+      image.inside("--network ${n}") {
 
-      stage("Install") {
-        sh "npm i"
-      }
-
-      if (shouldLint) {
-
-        stage("Lint") {
-          sh "npm run ${options.scriptLint}"
+        stage("Install") {
+          sh "npm i"
         }
 
-      }
+        if (shouldLint) {
 
-      if (shouldBuild) {
+          stage("Lint") {
+            sh "npm run ${options.scriptLint}"
+          }
 
-        stage("Build") {
-          sh "npm run ${options.scriptBuild}"
         }
 
-      }
-    }
+        if (shouldBuild) {
 
-    if (options.withPostgres) {
-      stage("Create Postgres container") {
+          stage("Build") {
+            sh "npm run ${options.scriptBuild}"
+          }
 
-        def postgresImage = docker.image('postgres:12-alpine')
-        
-        postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb -p 5431:5432") { c ->
-          postgresImage.inside {
-            // sh 'while ! pg_isready -U test -d bookmarkdb -p 5431; do sleep 1; done'
+        }
+
+        if (options.withPostgres && shouldTest) {
+          stage("Create Postgres container") {
+
+            def postgresImage = docker.image('postgres:12-alpine')
+            
+            postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb -p 5431:5432 --network ${n}") { c ->
+              postgresImage.inside("--network ${n}") {
+                sh 'while ! pg_isready -U test -d bookmarkdb -p 5431; do sleep 1; done'
+              }
+            }
           }
         }
-      }
-    }
 
-    image.inside {
+        if (shouldTest) {
 
-      if (shouldTest) {
+          stage("Test") {
+            sh "npm run ${options.scriptTest}"
+          }
 
-        stage("Test") {
-          sh "npm run ${options.scriptTest}"
         }
 
-      }
+        if (options.deploy) {
 
-      if (options.deploy) {
-
-        stage("Deploy to Beta") {
+          stage("Deploy to Beta") {
 
         }
       }
