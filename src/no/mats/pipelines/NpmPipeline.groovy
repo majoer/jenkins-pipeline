@@ -67,7 +67,9 @@ def run(Map<String, String> options) {
         def postgresImage = docker.image('postgres:12-alpine')
         
         postgresImage.withRun("-e POSTGRES_USER=test -e POSTGRES_DB=bookmarkdb -p 5432:5431") { c ->
-          sh 'while ! pg_isready -U test -d bookmarkdb; do sleep 1; done'
+          postgresImage.inside {
+            sh 'while ! pg_isready -U test -d bookmarkdb -p 5431; do sleep 1; done'
+          }
         }
       }
     }
