@@ -107,9 +107,9 @@ def start(Map<String, Object> options = [:]) {
       stage("Deploy to Beta") {
         withCredentials([
             usernamePassword(
-              credentialsId: 'ci-github',
-              passwordVariable: 'GIT_PASSWORD',
-              usernameVariable: 'GIT_USERNAME'
+              credentialsId: "git-provider-1",
+              passwordVariable: "GIT_PASSWORD",
+              usernameVariable: "GIT_USERNAME"
             )
           ]) {
             def origin = sh(returnStdout: true, script: "git remote get-url origin")
