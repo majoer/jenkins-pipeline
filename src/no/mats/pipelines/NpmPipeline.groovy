@@ -46,9 +46,9 @@ def start(Map<String, Object> options = [:]) {
           usernameVariable: 'GIT_USERNAME',
           passwordVariable: 'GIT_PASSWORD')
         ]) {
-        sh 'git config --global user.email "matsjoer@gmail.com"'
-        sh 'git config --global user.name "Jenkins"'
-        sh 'git config --global credential.helper "!p() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; p"'
+        sh 'git config --global --unset user.email'
+        sh 'git config --global --unset user.name'
+        sh 'git config --global --unset credential.helper'
         checkout scm
       }
       
