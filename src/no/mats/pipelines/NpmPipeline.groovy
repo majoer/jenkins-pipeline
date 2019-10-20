@@ -99,13 +99,13 @@ def start(Map<String, Object> options = [:]) {
           }
         }
       }
+    }
 
-      if (options.deploy && options.deployFromBranch == BRANCH_NAME) {
+    if (options.deploy && options.deployFromBranch == BRANCH_NAME) {
 
-        stage("Deploy to Beta") {
-          sh "git checkout release/beta"
-          sh "git rebase ${BRANCH_NAME}"
-        }
+      stage("Deploy to Beta") {
+        sh "git checkout -B release/beta"
+        sh "git push"
       }
     }
   }
