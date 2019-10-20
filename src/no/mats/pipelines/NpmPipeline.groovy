@@ -106,7 +106,7 @@ def start(Map<String, Object> options = [:]) {
       stage("Deploy to Beta") {
         withCredentials([
           usernamePassword(
-            credentialsId: '1dd07558-662e-475d-b0f8-82cdfe3a8347',
+            credentialsId: 'git-provider-1',
             usernameVariable: 'GIT_USERNAME',
             passwordVariable: 'GIT_PASSWORD')
           ]) {
