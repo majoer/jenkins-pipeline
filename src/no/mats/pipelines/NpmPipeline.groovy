@@ -12,7 +12,7 @@ def withDockerNetwork(Closure inner) {
   }
 }
 
-def run(Map<String, Object> options = [:]) {
+def start(Map<String, Object> options = [:]) {
 
   def defaultOptions = [
     deploy: false,
