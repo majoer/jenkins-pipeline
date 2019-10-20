@@ -109,7 +109,6 @@ def start(Map<String, Object> options = [:]) {
           ]) {
 
             //GIT_URL = bitbucket.org:gullbart/bookmark-gui.git
-            sh "echo ${GIT_URL}"
             sh "echo ${env.GIT_URL}"
             // def repository = "git@" + GIT_URL.replaceFirst(".+://", "").replaceFirst("/", ":")
 
