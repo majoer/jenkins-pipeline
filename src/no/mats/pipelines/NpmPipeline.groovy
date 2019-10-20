@@ -39,7 +39,20 @@ def start(Map<String, Object> options = [:]) {
     }
 
     stage("Checkout") {
+
+      withCredentials([
+        usernamePassword(
+          credentialsId: 'git-provider-1',
+          usernameVariable: 'GIT_USERNAME',
+          passwordVariable: 'GIT_PASSWORD')
+        ]) {
+        sh "git config --local user.email matsjoer@gmail.com"
+        sh "git config --local user.name Jenkins"
+        sh "git config --local credential.helper '!p() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; p'"
+      }
+
       checkout scm
+      
       def jsonSlurper = new JsonSlurper()
       def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
       def scripts = packageJson.scripts;
@@ -104,19 +117,8 @@ def start(Map<String, Object> options = [:]) {
     if (options.deploy && options.deployFromBranch == BRANCH_NAME) {
 
       stage("Deploy to Beta") {
-        withCredentials([
-          usernamePassword(
-            credentialsId: 'git-provider-1',
-            usernameVariable: 'GIT_USERNAME',
-            passwordVariable: 'GIT_PASSWORD')
-          ]) {
-
-            sh "git config --local user.email matsjoer@gmail.com"
-            sh "git config --local user.name Jenkins"
-            sh "git config --local credential.helper '!p() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; p'"
-            sh "git checkout -B release/beta"
-            sh "git push --set-upstream origin release/beta"
-        }
+        sh "git checkout -B release/beta"
+        sh "git push --set-upstream origin release/beta"
       }
     }
   }
