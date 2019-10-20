@@ -104,8 +104,19 @@ def start(Map<String, Object> options = [:]) {
     if (options.deploy && options.deployFromBranch == BRANCH_NAME) {
 
       stage("Deploy to Beta") {
-        sh "git checkout -B release/beta"
-        sh "git push --set-upstream origin release/beta"
+        withCredentials([
+          usernamePassword(credentialsId: 'fixed', usernameVariable: 'username', passwordVariable: 'password')
+          ]) {
+
+            //GIT_URL = bitbucket.org:gullbart/bookmark-gui.git
+            sh "echo ${GIT_URL}"
+            sh "echo ${env.GIT_URL}"
+            // def repository = "git@" + GIT_URL.replaceFirst(".+://", "").replaceFirst("/", ":")
+
+            // sh "git checkout -B release/beta"
+            // sh "git push --set-upstream origin release/beta"
+            // sh("git push http://$username:$password@git.corp.mycompany.com/repo")
+        }
       }
     }
   }
