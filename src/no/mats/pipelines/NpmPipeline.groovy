@@ -16,6 +16,7 @@ def start(Map<String, Object> options = [:]) {
 
   def defaultOptions = [
     deploy: false,
+    deployFromBranch: 'master',
     scriptLint: 'lint:ci',
     scriptBuild: 'build:ci',
     scriptTest: 'test:ci',
@@ -99,10 +100,11 @@ def start(Map<String, Object> options = [:]) {
         }
       }
 
-      if (options.deploy) {
+      if (options.deploy && options.deployFromBranch == BRANCH_NAME) {
 
         stage("Deploy to Beta") {
-        
+          sh "git checkout release/beta"
+          sh "git rebase ${BRANCH_NAME}"
         }
       }
     }
