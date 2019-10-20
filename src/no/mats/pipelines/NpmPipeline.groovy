@@ -12,6 +12,10 @@ def withDockerNetwork(Closure inner) {
   }
 }
 
+def run() {
+  run([])
+}
+
 def run(Map<String, String> options) {
 
   def defaultOptions = [
