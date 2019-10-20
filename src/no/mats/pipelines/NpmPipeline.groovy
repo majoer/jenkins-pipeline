@@ -105,16 +105,15 @@ def start(Map<String, Object> options = [:]) {
 
       stage("Deploy to Beta") {
         withCredentials([
-          usernamePassword(credentialsId: '1dd07558-662e-475d-b0f8-82cdfe3a8347', usernameVariable: 'username', passwordVariable: 'password')
+          usernamePassword(
+            credentialsId: '1dd07558-662e-475d-b0f8-82cdfe3a8347',
+            usernameVariable: 'GIT_USERNAME',
+            passwordVariable: 'GIT_PASSWORD')
           ]) {
 
-            //GIT_URL = bitbucket.org:gullbart/bookmark-gui.git
-            sh "echo ${env.GIT_URL}"
-            // def repository = "git@" + GIT_URL.replaceFirst(".+://", "").replaceFirst("/", ":")
-
-            // sh "git checkout -B release/beta"
-            // sh "git push --set-upstream origin release/beta"
-            // sh("git push http://$username:$password@git.corp.mycompany.com/repo")
+            sh 'git config --local credential.helper "!p() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; p"'
+            sh "git checkout -B release/beta"
+            sh "git push --set-upstream origin release/beta"
         }
       }
     }
