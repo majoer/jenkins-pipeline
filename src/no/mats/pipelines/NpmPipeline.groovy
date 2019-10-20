@@ -39,18 +39,7 @@ def start(Map<String, Object> options = [:]) {
     }
 
     stage("Checkout") {
-
-      withCredentials([
-        usernamePassword(
-          credentialsId: 'git-provider-1',
-          usernameVariable: 'GIT_USERNAME',
-          passwordVariable: 'GIT_PASSWORD')
-        ]) {
-        sh 'git config --global --unset user.email'
-        sh 'git config --global --unset user.name'
-        sh 'git config --global --unset credential.helper'
-        checkout scm
-      }
+      checkout scm
       
       def jsonSlurper = new JsonSlurper()
       def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
@@ -116,8 +105,10 @@ def start(Map<String, Object> options = [:]) {
     if (options.deploy && options.deployFromBranch == BRANCH_NAME) {
 
       stage("Deploy to Beta") {
-        sh "git checkout -B release/beta"
-        sh "git push --set-upstream origin release/beta"
+        sshagent(['git-provider-1']) {
+          sh "git checkout -B release/beta"
+          sh "git push --set-upstream origin release/beta"
+        }
       }
     }
   }
