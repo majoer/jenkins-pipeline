@@ -48,7 +48,7 @@ def start(Map<String, Object> options = [:]) {
         ]) {
         sh 'git config --local user.email "matsjoer@gmail.com"'
         sh 'git config --local user.name "Jenkins"'
-        sh 'git config --local credential.helper "!p() { echo username=$GIT_USERNAME; echo password=$GIT_PASSWORD; }; p"'
+        sh 'git config --local credential.helper ""'
       }
 
       checkout scm
