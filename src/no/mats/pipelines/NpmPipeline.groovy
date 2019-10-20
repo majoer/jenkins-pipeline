@@ -111,7 +111,9 @@ def start(Map<String, Object> options = [:]) {
             passwordVariable: 'GIT_PASSWORD')
           ]) {
 
-            sh 'git config --local credential.helper "!p() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; p"'
+            sh "git config --local user.email matsjoer@gmail.com"
+            sh "git config --local user.name Jenkins"
+            sh "git config --local credential.helper '!p() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; p'"
             sh "git checkout -B release/beta"
             sh "git push --set-upstream origin release/beta"
         }
