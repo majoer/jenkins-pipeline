@@ -31,7 +31,7 @@ def start(Map<String, Object> options = [:]) {
     def shouldTest = false
 
     stage("Create Nodejs container") {
-      nodeImage = docker.image("node:10-alpine")
+      nodeImage = docker.image("majoer/node-python:latest")
       nodeImage.inside {
         echo "Image is ready"
       }
