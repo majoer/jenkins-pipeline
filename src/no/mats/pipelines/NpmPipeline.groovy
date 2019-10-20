@@ -105,7 +105,7 @@ def start(Map<String, Object> options = [:]) {
 
       stage("Deploy to Beta") {
         sh "git checkout -B release/beta"
-        sh "git push"
+        sh "git push --set-upstream origin release/beta"
       }
     }
   }
