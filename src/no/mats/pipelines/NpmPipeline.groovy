@@ -39,9 +39,6 @@ def start(Map<String, Object> options = [:]) {
     }
 
     stage("Checkout") {
-      sh 'git config --local --unset credential.helper'
-      sh 'git config --local --unset user.name'
-      sh 'git config --local --unset user.email'
       checkout scm
       
       def jsonSlurper = new JsonSlurper()
