@@ -41,6 +41,8 @@ def start(Map<String, Object> options = [:]) {
     stage("Checkout") {
       checkout scm
       sh 'git config --local credential.helper "!p() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; p"'
+      sh 'git config --local user.name "Jenkins"'
+      sh 'git config --local user.email "matsjoer@gmail.com"'
       
       def jsonSlurper = new JsonSlurper()
       def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
