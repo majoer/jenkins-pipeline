@@ -105,10 +105,19 @@ def start(Map<String, Object> options = [:]) {
     if (options.deploy && options.deployFromBranch == BRANCH_NAME) {
 
       stage("Deploy to Beta") {
-        sshagent(credentials: ['git-provider-1']) {
-              sh('git checkout -B release/beta') 
-              sh('git push --set-upstream origin release/beta') 
-          }
+        withCredentials([
+            usernamePassword(
+              credentialsId: 'ci-github',
+              passwordVariable: 'GIT_PASSWORD',
+              usernameVariable: 'GIT_USERNAME'
+            )
+          ]) {
+            def origin = sh(returnStdout: true, script: "git remote get-url origin")
+            def gitUrl = origin.replace("git@", "")
+            
+            sh('git checkout -B release/beta') 
+            sh("git push ${GIT_USERNAME}:${GIT_PASSWORD}@${gitUrl}")
+        }
       }
     }
   }
