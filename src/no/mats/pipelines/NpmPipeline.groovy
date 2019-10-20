@@ -39,7 +39,6 @@ def start(Map<String, Object> options = [:]) {
     }
 
     stage("Checkout") {
-      sh 'git config --local --unset credential.helper'
       checkout scm
       sh 'git config --local credential.helper "!p() { echo username=\\$GIT_USERNAME; echo password=\\$GIT_PASSWORD; }; p"'
       
