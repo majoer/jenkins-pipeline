@@ -105,7 +105,7 @@ def start(Map<String, Object> options = [:]) {
     if (options.deploy && options.deployFromBranch == BRANCH_NAME) {
 
       stage("Deploy to Beta") {
-        sshagent(['git-provider-1']) {
+        sshagent(credentials: ['git-provider-1']) {
               sh('git checkout -B release/beta') 
               sh('git push --set-upstream origin release/beta') 
           }
