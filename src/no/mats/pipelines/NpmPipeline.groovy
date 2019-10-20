@@ -105,7 +105,7 @@ def start(Map<String, Object> options = [:]) {
 
       stage("Deploy to Beta") {
         withCredentials([
-          usernamePassword(credentialsId: 'fixed', usernameVariable: 'username', passwordVariable: 'password')
+          usernamePassword(credentialsId: '1dd07558-662e-475d-b0f8-82cdfe3a8347', usernameVariable: 'username', passwordVariable: 'password')
           ]) {
 
             //GIT_URL = bitbucket.org:gullbart/bookmark-gui.git
