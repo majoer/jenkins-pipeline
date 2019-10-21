@@ -12,6 +12,10 @@ def withDockerNetwork(Closure inner) {
   }
 }
 
+def ci(command) {
+  sh "env NODE_ENV=ci"
+}
+
 def start(Map<String, Object> options = [:]) {
 
   def defaultOptions = [
@@ -54,13 +58,13 @@ def start(Map<String, Object> options = [:]) {
       nodeImage.inside("--network ${n}") {
 
         stage("Install") {
-          sh "npm i"
+          ci("npm i")
         }
 
         if (shouldLint) {
 
           stage("Lint") {
-            sh "npm run ${options.scriptLint}"
+            ci("npm run ${options.scriptLint}")
           }
 
         }
@@ -68,7 +72,7 @@ def start(Map<String, Object> options = [:]) {
         if (shouldBuild) {
 
           stage("Build") {
-            sh "npm run ${options.scriptBuild}"
+            ci("npm run ${options.scriptBuild}")
           }
 
         }
@@ -89,14 +93,14 @@ def start(Map<String, Object> options = [:]) {
 
               nodeImage.inside("--network ${n}") {
                 stage("Test") {
-                  sh "npm run ${options.scriptTest}"
+                  ci("npm run ${options.scriptTest}")
                 }
               }
             }
           }
         } else {
           stage("Test") {
-            sh "npm run ${options.scriptTest}"
+            sh ci("npm run) ${options.scriptTest}"
           }
         }
       }
