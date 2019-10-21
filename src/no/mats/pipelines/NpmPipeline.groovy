@@ -100,7 +100,7 @@ def start(Map<String, Object> options = [:]) {
           }
         } else {
           stage("Test") {
-            sh ci("npm run) ${options.scriptTest}"
+            sh ci("npm run ${options.scriptTest}")
           }
         }
       }
