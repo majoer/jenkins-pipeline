@@ -5,8 +5,8 @@ def deploy() {
   withCredentials([
     usernamePassword(
       credentialsId: "git-provider-1",
-      passwordVariable: "GIT_PASSWORD",
-      usernameVariable: "GIT_USERNAME"
+      usernameVariable: "GIT_USERNAME",
+      passwordVariable: "GIT_PASSWORD"
     )
   ]) {
     def origin = sh(returnStdout: true, script: "git remote get-url origin")

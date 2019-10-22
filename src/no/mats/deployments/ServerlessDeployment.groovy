@@ -5,8 +5,8 @@ def deploy() {
   withCredentials([
     usernamePassword(
       credentialsId: "serverless-provider-1",
-      passwordVariable: "KEY",
-      usernameVariable: "SECRET"
+      usernameVariable: "KEY",
+      passwordVariable: "SECRET",
     )
   ]) {
     def serverless = "node_modules/serverless/bin/serverless"
@@ -16,8 +16,8 @@ def deploy() {
     try {
       sh("${serverless} deploy")
     } finally {
-      sh("${serverless} config credentials --provider aws --key gibberish --secret gibberish")
+      sh("${serverless} config credentials --provider aws --key gibberish --secret gibberish --overwrite")
     }
   }
-  
+
 }
