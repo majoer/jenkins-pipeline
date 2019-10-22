@@ -1,3 +1,5 @@
+package no.mats.deployments
+
 withCredentials([
   usernamePassword(
     credentialsId: "serverless-provider-1",
