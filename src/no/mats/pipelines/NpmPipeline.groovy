@@ -1,6 +1,7 @@
 package no.mats.pipelines
 
 import groovy.json.JsonSlurper 
+import no.mats.deployments.*
 
 def withDockerNetwork(Closure inner) {
   try {
@@ -21,6 +22,7 @@ def start(Map<String, Object> options = [:]) {
   def defaultOptions = [
     deploy: false,
     deployFromBranch: 'master',
+    deployMethod: 'git',
     scriptLint: 'lint:ci',
     scriptBuild: 'build:ci',
     scriptTest: 'test:ci',
@@ -109,19 +111,14 @@ def start(Map<String, Object> options = [:]) {
     if (options.deploy && options.deployFromBranch == BRANCH_NAME) {
 
       stage("Deploy to Beta") {
-        withCredentials([
-            usernamePassword(
-              credentialsId: "git-provider-1",
-              passwordVariable: "GIT_PASSWORD",
-              usernameVariable: "GIT_USERNAME"
-            )
-          ]) {
-            def origin = sh(returnStdout: true, script: "git remote get-url origin")
-            def gitUrl = origin.replace("https://", "")
-            def pushUrl = "https://${GIT_USERNAME}:${GIT_PASSWORD}@${gitUrl}"
-            
-            sh('git checkout -B release/beta') 
-            sh("git push ${pushUrl}")
+        switch (options.deployMethod) {
+          case 'serverless':
+            new ServerlessDeployment()
+            break
+          case 'git':
+            new GitDeployment()
+            break
+          default: error("Unknown deployMethod: " + options.deployMethod)
         }
       }
     }
