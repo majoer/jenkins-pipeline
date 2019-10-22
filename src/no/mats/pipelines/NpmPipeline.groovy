@@ -14,7 +14,7 @@ def withDockerNetwork(Closure inner) {
 }
 
 def ci(command) {
-  sh "env NODE_ENV=ci"
+  sh "env NODE_ENV=ci ${command}"
 }
 
 def start(Map<String, Object> options = [:]) {
@@ -102,7 +102,7 @@ def start(Map<String, Object> options = [:]) {
           }
         } else {
           stage("Test") {
-            sh ci("npm run ${options.scriptTest}")
+            ci("npm run ${options.scriptTest}")
           }
         }
       }
