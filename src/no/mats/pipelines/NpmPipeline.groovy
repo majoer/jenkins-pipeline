@@ -114,8 +114,6 @@ def start(Map<String, Object> options = [:]) {
         switch (options.deployMethod) {
           case 'serverless':
             nodeImage.inside() {
-              sh 'ls'
-              sh 'ls node_modules'
               new ServerlessDeployment().deploy()
             }
             break
