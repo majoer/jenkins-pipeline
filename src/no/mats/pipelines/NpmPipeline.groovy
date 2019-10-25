@@ -119,7 +119,7 @@ def start(Map<String, Object> options = [:]) {
             }
             break
           case 'git':
-            new GitDeployment().deploy()
+            new GitDeployment().deploy(options)
             break
           default: error("Unknown deployMethod: " + options.deployMethod)
         }
