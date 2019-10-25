@@ -22,7 +22,7 @@ def deploy(options) {
     withCredentials([
       string(
         credentialsId: options.credentialsIdDeployHook
-        variable: WEBHOOK
+        variable: "WEBHOOK"
       )
     ]) {
       sh("curl -X POST -d {} ${WEBHOOK}")
