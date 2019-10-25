@@ -21,7 +21,7 @@ def deploy(options) {
 
     withCredentials([
       string(
-        credentialsId: options.credentialsIdDeployHook
+        credentialsId: options.credentialsIdDeployHook,
         variable: "WEBHOOK"
       )
     ]) {
