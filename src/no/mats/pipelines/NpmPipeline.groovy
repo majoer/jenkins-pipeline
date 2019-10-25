@@ -26,7 +26,8 @@ def start(Map<String, Object> options = [:]) {
     scriptLint: 'lint:ci',
     scriptBuild: 'build:ci',
     scriptTest: 'test:ci',
-    withPostgres: false
+    withPostgres: false,
+    credentialsIdDeployHook: ''
   ]
 
   options = defaultOptions + options

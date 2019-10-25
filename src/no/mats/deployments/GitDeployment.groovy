@@ -1,6 +1,6 @@
 package no.mats.deployments
 
-def deploy() {
+def deploy(options) {
 
   withCredentials([
     usernamePassword(
@@ -17,4 +17,15 @@ def deploy() {
     sh("git push ${pushUrl}")
   }
 
+  if (options.credentialsIdDeployHook) {
+
+    withCredentials([
+      string(
+        credentialsId: options.credentialsIdDeployHook
+        variable: WEBHOOK
+      )
+    ]) {
+      sh("curl -X POST -d {} ${WEBHOOK}")
+    }
+  }
 }
