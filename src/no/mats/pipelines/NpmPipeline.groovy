@@ -61,7 +61,7 @@ def start(Map<String, Object> options = [:]) {
       nodeImage.inside("--network ${n}") {
 
         stage("Install") {
-          ci("npm ci")
+          ci("npm i")
         }
 
         if (shouldLint) {
