@@ -9,18 +9,8 @@ def deploy(nodeImage) {
       passwordVariable: "SECRET",
     )
   ]) {
-    nodeImage.inside() {
-
-      def serverless = "node_modules/serverless/bin/serverless"
-
-      sh("${serverless} config credentials --provider aws --key ${KEY} --secret ${SECRET}")
-      sh("cat ~/.aws/credentials")
-      
-      try {
-        sh("${serverless} deploy")
-      } finally {
-        sh("${serverless} config credentials --provider aws --key gibberish --secret gibberish --overwrite")
-      }
+    nodeImage.inside("-e AWS_ACCESS_KEY_ID=${KEY} -e AWS_SECRET_ACCESS_KEY=${SECRET}") {
+      sh("node_modules/serverless/bin/serverless deploy")
     }
   }
 }
