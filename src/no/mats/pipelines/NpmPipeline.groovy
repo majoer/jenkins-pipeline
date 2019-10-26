@@ -84,10 +84,10 @@ def start(Map<String, Object> options = [:]) {
       }
 
       if (shouldTest) {
+        
+        stage("Test") {
 
-        if (options.withPostgres) {
-
-          stage("Create Postgres container") {
+          if (options.withPostgres) {
 
             def postgresImage = docker.image('postgres:12-alpine')
             
@@ -97,14 +97,11 @@ def start(Map<String, Object> options = [:]) {
               }
 
               nodeImage.inside("--network ${n}") {
-                stage("Test") {
                   ci("npm run ${options.scriptTest}")
                 }
               }
             }
-          }
-        } else {
-          stage("Test") {
+          } else {
             ci("npm run ${options.scriptTest}")
           }
         }
