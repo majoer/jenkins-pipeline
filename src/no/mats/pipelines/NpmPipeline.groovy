@@ -22,6 +22,7 @@ def debugCwd() {
     set +x
     echo ---- Debug ----
     pwd
+    echo ''
     ls -a
     echo ---- Debug ----
     set -x
