@@ -17,6 +17,13 @@ def ci(command) {
   sh "env NODE_ENV=ci ${command}"
 }
 
+def debug(target) {
+  sh "echo ----- Debugging ${target} -----"
+  sh "pwd"
+  sh "ls -a"
+  sh "echo ----------------"
+}
+
 def start(Map<String, Object> options = [:]) {
 
   def defaultOptions = [
@@ -37,12 +44,13 @@ def start(Map<String, Object> options = [:]) {
     def shouldLint = false
     def shouldBuild = false
     def shouldTest = false
+    debug("jenkins")
 
     stage("Create Nodejs container") {
       nodeImage = docker.image("majoer/node-python:10")
       nodeImage.inside {
         echo "Image is ready"
-        sh "ls -a"
+        debug("nodeImage")
       }
     }
 
