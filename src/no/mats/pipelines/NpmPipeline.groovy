@@ -118,9 +118,7 @@ def start(Map<String, Object> options = [:]) {
       stage("Deploy to Beta") {
         switch (options.deployMethod) {
           case 'serverless':
-            nodeImage.inside() {
-              new ServerlessDeployment().deploy()
-            }
+            new ServerlessDeployment().deploy(nodeImage)
             break
           case 'git':
             new GitDeployment().deploy(options)
