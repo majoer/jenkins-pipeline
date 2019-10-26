@@ -17,11 +17,15 @@ def ci(command) {
   sh "env NODE_ENV=ci ${command}"
 }
 
-def debug(target) {
-  sh "echo ----- Debugging ${target} -----"
-  sh "pwd"
-  sh "ls -a"
-  sh "echo ----------------"
+def debugCwd() {
+  sh '''
+    set +x
+    echo ---- Debug ----
+    pwd
+    ls -a
+    echo ---- Debug ----
+    set -x
+  '''
 }
 
 def start(Map<String, Object> options = [:]) {
@@ -48,6 +52,7 @@ def start(Map<String, Object> options = [:]) {
 
     stage("Checkout") {
       checkout scm
+      debugCwd()
       
       def jsonSlurper = new JsonSlurper()
       def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
@@ -62,7 +67,7 @@ def start(Map<String, Object> options = [:]) {
       nodeImage.inside("--network ${n}") {
 
         stage("Install") {
-          debug("nodeImage")
+          debugCwd()
           ci("npm ci")
         }
 
