@@ -63,7 +63,7 @@ def start(Map<String, Object> options = [:]) {
 
         stage("Install") {
           debug("nodeImage")
-          ci("npm i")
+          ci("npm ci")
         }
 
         if (shouldLint) {
