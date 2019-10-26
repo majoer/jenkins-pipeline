@@ -46,24 +46,21 @@ def start(Map<String, Object> options = [:]) {
     def shouldTest = false
     debug("jenkins")
 
-    stage("Create Nodejs container") {
+    stage("Checkout in Nodejs container") {
       nodeImage = docker.image("majoer/node-python:10")
       nodeImage.inside {
         echo "Image is ready"
+        checkout scm
+      
+        def jsonSlurper = new JsonSlurper()
+        def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
+        def scripts = packageJson.scripts;
+        
+        shouldLint = scripts[options.scriptLint]
+        shouldBuild = scripts[options.scriptBuild]
+        shouldTest = scripts[options.scriptTest]
         debug("nodeImage")
       }
-    }
-
-    stage("Checkout") {
-      checkout scm
-      
-      def jsonSlurper = new JsonSlurper()
-      def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
-      def scripts = packageJson.scripts;
-      
-      shouldLint = scripts[options.scriptLint]
-      shouldBuild = scripts[options.scriptBuild]
-      shouldTest = scripts[options.scriptTest]
     }
     
     withDockerNetwork { n ->
