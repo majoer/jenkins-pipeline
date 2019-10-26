@@ -40,33 +40,29 @@ def start(Map<String, Object> options = [:]) {
   options = defaultOptions + options
 
   node {
-    def image
+    def nodeImage = docker.image("majoer/node-python:10")
     def shouldLint = false
     def shouldBuild = false
     def shouldTest = false
-    debug("jenkins")
+    deleteDir()
 
-    stage("Checkout in Nodejs container") {
-      nodeImage = docker.image("majoer/node-python:10")
-      nodeImage.inside {
-        echo "Image is ready"
-        checkout scm
+    stage("Checkout") {
+      checkout scm
       
-        def jsonSlurper = new JsonSlurper()
-        def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
-        def scripts = packageJson.scripts;
-        
-        shouldLint = scripts[options.scriptLint]
-        shouldBuild = scripts[options.scriptBuild]
-        shouldTest = scripts[options.scriptTest]
-        debug("nodeImage")
-      }
+      def jsonSlurper = new JsonSlurper()
+      def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
+      def scripts = packageJson.scripts;
+      
+      shouldLint = scripts[options.scriptLint]
+      shouldBuild = scripts[options.scriptBuild]
+      shouldTest = scripts[options.scriptTest]
     }
     
     withDockerNetwork { n ->
       nodeImage.inside("--network ${n}") {
 
         stage("Install") {
+          debug("nodeImage")
           ci("npm i")
         }
 
