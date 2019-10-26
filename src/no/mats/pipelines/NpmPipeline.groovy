@@ -42,6 +42,7 @@ def start(Map<String, Object> options = [:]) {
       nodeImage = docker.image("majoer/node-python:10")
       nodeImage.inside {
         echo "Image is ready"
+        sh "ls -a"
       }
     }
 
