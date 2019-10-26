@@ -14,6 +14,7 @@ def deploy(nodeImage) {
       def serverless = "node_modules/serverless/bin/serverless"
 
       sh("${serverless} config credentials --provider aws --key ${KEY} --secret ${SECRET}")
+      sh("cat ~/.aws/credentials")
       
       try {
         sh("${serverless} deploy")
