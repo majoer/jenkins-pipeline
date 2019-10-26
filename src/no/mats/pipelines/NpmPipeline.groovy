@@ -97,8 +97,7 @@ def start(Map<String, Object> options = [:]) {
               }
 
               nodeImage.inside("--network ${n}") {
-                  ci("npm run ${options.scriptTest}")
-                }
+                ci("npm run ${options.scriptTest}")
               }
             }
           } else {
