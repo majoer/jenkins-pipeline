@@ -1,6 +1,5 @@
 package no.mats.pipelines
 
-import groovy.json.JsonSlurperClassic 
 import no.mats.deployments.*
 
 def withDockerNetwork(Closure inner) {
@@ -54,8 +53,7 @@ def start(Map<String, Object> options = [:]) {
     stage("Checkout") {
       checkout scm
       
-      def jsonSlurper = new JsonSlurperClassic()
-      def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
+      def packageJson = readJSON file "${pwd()}/package.json"
       def scripts = packageJson.scripts;
       
       shouldLint = scripts[options.scriptLint]
