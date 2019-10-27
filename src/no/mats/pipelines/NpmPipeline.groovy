@@ -54,16 +54,12 @@ def start(Map<String, Object> options = [:]) {
       checkout scm
       
       def packageJson = readJSON(file: "${pwd()}/package.json")
-      sh 'echo 1'
+      sh 'echo'
       def scripts = packageJson.scripts;
-      sh 'echo 2'
       
       shouldLint = scripts[options.scriptLint]
-      sh 'echo 3'
       shouldBuild = scripts[options.scriptBuild]
-      sh 'echo 4'
       shouldTest = scripts[options.scriptTest]
-      sh 'echo done'
     }
     
     withDockerNetwork { n ->
