@@ -44,6 +44,7 @@ def start(Map<String, Object> options = [:]) {
   options = defaultOptions + options
 
   node {
+    sh "echo"
     def nodeImage = docker.image("majoer/node-python:10")
     def shouldLint = false
     def shouldBuild = false
