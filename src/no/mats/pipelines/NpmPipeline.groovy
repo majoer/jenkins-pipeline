@@ -53,7 +53,6 @@ def start(Map<String, Object> options = [:]) {
 
     stage("Checkout") {
       checkout scm
-      debugCwd()
       
       def jsonSlurper = new JsonSlurper()
       def packageJson = jsonSlurper.parse(new File("${pwd()}/package.json"))
@@ -68,7 +67,6 @@ def start(Map<String, Object> options = [:]) {
       nodeImage.inside("--network ${n}") {
 
         stage("Install") {
-          debugCwd()
           ci("npm ci")
         }
 
