@@ -54,7 +54,6 @@ def start(Map<String, Object> options = [:]) {
       checkout scm
       
       def packageJson = readJSON(file: "${pwd()}/package.json")
-      sh 'echo'
       def scripts = packageJson.scripts;
       
       shouldLint = scripts[options.scriptLint]
