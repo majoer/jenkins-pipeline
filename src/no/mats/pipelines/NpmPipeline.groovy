@@ -53,7 +53,7 @@ def start(Map<String, Object> options = [:]) {
     stage("Checkout") {
       checkout scm
       
-      def packageJson = readJSON file "${pwd()}/package.json"
+      def packageJson = readJSON(new File("${pwd()}/package.json"))
       def scripts = packageJson.scripts;
       
       shouldLint = scripts[options.scriptLint]
