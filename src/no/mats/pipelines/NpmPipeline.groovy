@@ -61,6 +61,7 @@ def start(Map<String, Object> options = [:]) {
       shouldLint = scripts[options.scriptLint]
       shouldBuild = scripts[options.scriptBuild]
       shouldTest = scripts[options.scriptTest]
+      sh "echo 'done checkout'"
     }
     
     withDockerNetwork { n ->
