@@ -34,6 +34,10 @@ def start(Map<String, Object> options = [:]) {
     deploy: false,
     deployFromBranch: 'master',
     deployMethod: 'git',
+    s3Bucket: null,
+    s3CloudFrontDistId: null,
+    s3DeployFolder: './dist',
+    s3Region: null,
     scriptLint: 'lint:ci',
     scriptBuild: 'build:ci',
     scriptTest: 'test:ci',
@@ -115,7 +119,10 @@ def start(Map<String, Object> options = [:]) {
       stage("Deploy to Beta") {
         switch (options.deployMethod) {
           case 'serverless':
-            new ServerlessDeployment().deploy(nodeImage)
+            new ServerlessDeployment().deploy(options, nodeImage)
+            break
+          case 's3':
+            new S3Deployment().deploy(options, nodeImage)
             break
           case 'git':
             new GitDeployment().deploy(options)

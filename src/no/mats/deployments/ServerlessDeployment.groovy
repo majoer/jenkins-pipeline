@@ -1,6 +1,6 @@
 package no.mats.deployments
 
-def deploy(nodeImage) {
+def deploy(options, nodeImage) {
 
   withCredentials([
     usernamePassword(
