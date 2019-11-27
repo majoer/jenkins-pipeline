@@ -9,7 +9,7 @@ def createDeployCommand(options) {
   deployCmd += " --private"
 
   if (options.s3CloudFrontDistId != null) {
-    deployCmd += "--distId ${options.s3CloudFrontDistId} --invalidate '/'"
+    deployCmd += " --distId ${options.s3CloudFrontDistId} --invalidate '/'"
   }
 
   return deployCmd
