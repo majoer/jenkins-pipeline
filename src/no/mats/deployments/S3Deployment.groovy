@@ -6,9 +6,10 @@ def createDeployCommand(options) {
   deployCmd += " --cwd '${options.s3DeployFolder}/'"
   deployCmd += " --region ${options.s3Region}"
   deployCmd += " --bucket ${options.s3Bucket}"
+  deployCmd += " --private"
 
   if (options.s3CloudFrontDistId != null) {
-    deployCmd += "--distId ${options.s3CloudFrontDistId} --invalidate"
+    deployCmd += "--distId ${options.s3CloudFrontDistId} --invalidate '/'"
   }
 
   return deployCmd
